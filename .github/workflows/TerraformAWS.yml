@@ -1,0 +1,55 @@
+
+name: "Deploy K8s in AWS"
+
+on:
+  push:
+    paths:
+    - 'terraform_aws/**'
+    - '.github/workflows/TerrawormAWS.yml'
+    branches:
+    - main
+  workflow_dispatch:
+
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_REGION: ${{ secrets.AWS_REGION }}  
+
+jobs:
+  terraform:
+    name: "Terraform"
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: terraform_aws
+
+    steps:
+     - name: Checkout code
+       uses: actions/checkout@v2
+
+     - name: Setup Terraform
+       uses: hashicorp/setup-terraform@v1
+       with:
+          terraform_version: latest
+          terraform_wrapper: false
+     
+     - name: Create bucket if dosn't exists
+       env:
+        SCRIPT_DIR: ${{ github.workspace }}/terraform_AWS/scripts
+       run: bash  $SCRIPT_DIR/create-s3.sh
+
+     - name: Terraform Init
+       id: init
+       run: terraform init
+
+     - name: Terraform Plan
+       id: plan
+       run: terraform plan -no-color
+
+     - name: Terraform Apply
+       if: "!contains(github.event.head_commit.message, 'destroy')"
+       run: terraform apply -auto-approve
+
+     - name: Terraform Destroy
+       if: contains(github.event.head_commit.message, 'destroy')
+       run: terraform destroy -auto-approve
