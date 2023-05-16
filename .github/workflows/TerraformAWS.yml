@@ -48,7 +48,7 @@ jobs:
 
      - name: Terraform Apply
        if: "!contains(github.event.head_commit.message, 'destroy')"
-       run: terraform apply -auto-approve
+       run: terraform apply -auto-approve -lock=false
 
      - name: Terraform Destroy
        if: contains(github.event.head_commit.message, 'destroy')
