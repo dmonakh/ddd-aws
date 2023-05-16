@@ -5,7 +5,7 @@ on:
   push:
     paths:
     - 'terraform_aws/**'
-    - '.github/workflows/TerrawormAWS.yml'
+    - '.github/workflows/TerraformAWS.yml'
     branches:
     - main
   workflow_dispatch:
