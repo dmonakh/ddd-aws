@@ -53,3 +53,4 @@ jobs:
      - name: Terraform Destroy
        if: contains(github.event.head_commit.message, 'destroy')
        run: terraform destroy -auto-approve
+       
