@@ -62,29 +62,16 @@ module "eks" {
   vpc_id = module.vpc.vpc_id
 
   enable_irsa = true
-}
-
-module "eks" {
-  source  = "terraform-aws-modules/eks/aws"
-  version = "18.30.3"
-
-  cluster_name    = "${local.cluster_name}"
-  cluster_version = "1.24"
-  subnet_ids      = module.vpc.private_subnets
-
-  vpc_id = module.vpc.vpc_id
-
   eks_managed_node_groups = {
-    main = {
-      desired_capacity = 1
-      max_capacity     = 2
-      min_capacity     = 0
+  main = {
+    desired_capacity = 1
+    max_capacity     = 2
+    min_capacity     = 0
 
-      instance_type = "t2.micro"
+    instance_type = "t2.micro"
     }
   }
 }
-
 
 # resource "aws_iam_role" "nodes" {
 #   name = "eks-node-group-nodes"
