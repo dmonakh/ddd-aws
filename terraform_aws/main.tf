@@ -89,74 +89,74 @@ resource "aws_iam_role_policy_attachment" "AmazonEC2ContainerRegistryReadOnly" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
 }
 
-resource "aws_launch_template" "eks_node_group_template" {
-  name_prefix   = "${local.cluster_name}-"
-  instance_type = "t2.micro"
+# resource "aws_launch_template" "eks_node_group_template" {
+#   name_prefix   = "${local.cluster_name}-"
+#   instance_type = "t2.micro"
 
-  image_id = "ami-0889a44b331db0194"
+#   image_id = "ami-0889a44b331db0194"
 
-  block_device_mappings {
-    device_name = "/dev/xvda"
+#   block_device_mappings {
+#     device_name = "/dev/xvda"
 
-    ebs {
-      volume_size = 20
-      delete_on_termination = true
-      volume_type = "gp2"
-    }
-  }
+#     ebs {
+#       volume_size = 20
+#       delete_on_termination = true
+#       volume_type = "gp2"
+#     }
+#   }
 
-  tag_specifications {
-    resource_type = "instance"
+#   tag_specifications {
+#     resource_type = "instance"
 
-    tags = {
-      Name = "${local.cluster_name}-worker-node"
-    }
-  }
-}
+#     tags = {
+#       Name = "${local.cluster_name}-worker-node"
+#     }
+#   }
+# }
 
-resource "aws_lb_target_group" "eks_target_group" {
-  name     = "eks-target-group"
-  port     = 80
-  protocol = "HTTP"
-  vpc_id   = module.vpc.vpc_id
+# resource "aws_lb_target_group" "eks_target_group" {
+#   name     = "eks-target-group"
+#   port     = 80
+#   protocol = "HTTP"
+#   vpc_id   = module.vpc.vpc_id
 
-  health_check {
-    path                = "/"
-    port                = "traffic-port"
-    protocol            = "HTTP"
-    interval            = 30
-    timeout             = 10
-    healthy_threshold   = 3
-    unhealthy_threshold = 3
-  }
-}
-resource "aws_autoscaling_group" "eks_node_group" {
-  name                      = "${local.cluster_name}-nodes"
-  min_size                  = 1
-  max_size                  = 2
-  desired_capacity          = 1
-  launch_template {
-    id      = aws_launch_template.eks_node_group_template.id
-    version = "$Latest"
-  }
+#   health_check {
+#     path                = "/"
+#     port                = "traffic-port"
+#     protocol            = "HTTP"
+#     interval            = 30
+#     timeout             = 10
+#     healthy_threshold   = 3
+#     unhealthy_threshold = 3
+#   }
+# }
+# resource "aws_autoscaling_group" "eks_node_group" {
+#   name                      = "${local.cluster_name}-nodes"
+#   min_size                  = 1
+#   max_size                  = 2
+#   desired_capacity          = 1
+#   launch_template {
+#     id      = aws_launch_template.eks_node_group_template.id
+#     version = "$Latest"
+#   }
 
-  vpc_zone_identifier       = module.vpc.private_subnets
-  tag {
-    key                 = "kubernetes.io/cluster/${local.cluster_name}"
-    value               = "true"
-    propagate_at_launch = true
-  }
+#   vpc_zone_identifier       = module.vpc.private_subnets
+#   tag {
+#     key                 = "kubernetes.io/cluster/${local.cluster_name}"
+#     value               = "true"
+#     propagate_at_launch = true
+#   }
 
-  tag {
-    key                 = "k8s.io/role/node"
-    value               = "1"
-    propagate_at_launch = true
-  }
-}
-resource "aws_autoscaling_attachment" "eks_node_group_attachment" {
-  autoscaling_group_name = aws_autoscaling_group.eks_node_group.name
-  lb_target_group_arn    = aws_lb_target_group.eks_target_group.arn
-}
+#   tag {
+#     key                 = "k8s.io/role/node"
+#     value               = "1"
+#     propagate_at_launch = true
+#   }
+# }
+# resource "aws_autoscaling_attachment" "eks_node_group_attachment" {
+#   autoscaling_group_name = aws_autoscaling_group.eks_node_group.name
+#   lb_target_group_arn    = aws_lb_target_group.eks_target_group.arn
+# }
 resource "aws_eks_node_group" "private-nodes" {
   cluster_name    = module.eks.cluster_name
   node_group_name = "${local.cluster_name}-nodes"
@@ -170,14 +170,14 @@ resource "aws_eks_node_group" "private-nodes" {
     min_size     = 0
   }
 
-  launch_template {
-    id      = aws_launch_template.eks_node_group_template.id
-    version = "$Latest"
-  }
+  # launch_template {
+  #   id      = aws_launch_template.eks_node_group_template.id
+  #   version = "$Latest"
+  # }
 
   depends_on = [
     aws_iam_role_policy_attachment.AmazonEKSWorkerNodePolicy,
     aws_iam_role_policy_attachment.AmazonEC2ContainerRegistryReadOnly,
-    aws_autoscaling_attachment.eks_node_group_attachment,
+    # aws_autoscaling_attachment.eks_node_group_attachment,
   ]
 }
