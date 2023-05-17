@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket         = "mondybuckettest123"  
+    bucket         = "bucket_name=mondytestbucket183"  
     key            = "terraform.tfstate"   
     region         = "us-east-1"           
     encrypt        = true                  
