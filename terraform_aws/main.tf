@@ -181,3 +181,4 @@ resource "aws_eks_node_group" "private-nodes" {
     # aws_autoscaling_attachment.eks_node_group_attachment,
   ]
 }
+
