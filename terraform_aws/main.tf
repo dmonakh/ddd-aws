@@ -181,4 +181,3 @@ module "eks" {
 #     aws_autoscaling_attachment.eks_node_group_attachment,
 #   ]
 # }
-
