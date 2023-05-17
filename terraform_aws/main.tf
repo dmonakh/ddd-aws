@@ -8,18 +8,18 @@ locals {
   cluster_name = "mondyk8awsklas"
 }
 
-module "eks-kubeconfig" {
-  source     = "hyperbadger/eks-kubeconfig/aws"
-  version    = "1.0.0"
+# module "eks-kubeconfig" {
+#   source     = "hyperbadger/eks-kubeconfig/aws"
+#   version    = "1.0.0"
 
-  depends_on = [module.eks]
-  cluster_id =  module.eks.cluster_name
-  }
+#   depends_on = [module.eks]
+#   cluster_id =  module.eks.cluster_name
+#   }
 
-resource "local_file" "kubeconfig" {
-  content  = module.eks-kubeconfig.kubeconfig
-  filename = "kubeconfig_${local.cluster_name}"
-}
+# resource "local_file" "kubeconfig" {
+#   content  = module.eks-kubeconfig.kubeconfig
+#   filename = "kubeconfig_${local.cluster_name}"
+# }
 
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
@@ -64,30 +64,30 @@ module "eks" {
   enable_irsa = true
 }
 
-resource "aws_iam_role" "nodes" {
-  name = "eks-node-group-nodes"
+# resource "aws_iam_role" "nodes" {
+#   name = "eks-node-group-nodes"
 
-  assume_role_policy = jsonencode({
-    Statement = [{
-      Action = "sts:AssumeRole"
-      Effect = "Allow"
-      Principal = {
-        Service = "ec2.amazonaws.com"
-      }
-    }]
-    Version = "2012-10-17"
-  })
-}
+#   assume_role_policy = jsonencode({
+#     Statement = [{
+#       Action = "sts:AssumeRole"
+#       Effect = "Allow"
+#       Principal = {
+#         Service = "ec2.amazonaws.com"
+#       }
+#     }]
+#     Version = "2012-10-17"
+#   })
+# }
 
-resource "aws_iam_role_policy_attachment" "AmazonEKSWorkerNodePolicy" {
-  role       = aws_iam_role.nodes.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy" 
-}
+# resource "aws_iam_role_policy_attachment" "AmazonEKSWorkerNodePolicy" {
+#   role       = aws_iam_role.nodes.name
+#   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy" 
+# }
 
-resource "aws_iam_role_policy_attachment" "AmazonEC2ContainerRegistryReadOnly" {
-  role       = aws_iam_role.nodes.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
-}
+# resource "aws_iam_role_policy_attachment" "AmazonEC2ContainerRegistryReadOnly" {
+#   role       = aws_iam_role.nodes.name
+#   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+# }
 
 # resource "aws_launch_template" "eks_node_group_template" {
 #   name_prefix   = "${local.cluster_name}-"
@@ -157,28 +157,28 @@ resource "aws_iam_role_policy_attachment" "AmazonEC2ContainerRegistryReadOnly" {
 #   autoscaling_group_name = aws_autoscaling_group.eks_node_group.name
 #   lb_target_group_arn    = aws_lb_target_group.eks_target_group.arn
 # }
-resource "aws_eks_node_group" "private-nodes" {
-  cluster_name    = module.eks.cluster_name
-  node_group_name = "${local.cluster_name}-nodes"
-  node_role_arn   = aws_iam_role.nodes.arn
+# resource "aws_eks_node_group" "private-nodes" {
+#   cluster_name    = module.eks.cluster_name
+#   node_group_name = "${local.cluster_name}-nodes"
+#   node_role_arn   = aws_iam_role.nodes.arn
 
-  subnet_ids =  module.vpc.private_subnets
+#   subnet_ids =  module.vpc.private_subnets
 
-  scaling_config {
-    desired_size = 1
-    max_size     = 2
-    min_size     = 0
-  }
+#   scaling_config {
+#     desired_size = 1
+#     max_size     = 2
+#     min_size     = 0
+#   }
 
-  # launch_template {
-  #   id      = aws_launch_template.eks_node_group_template.id
-  #   version = "$Latest"
-  # }
+#   launch_template {
+#     id      = aws_launch_template.eks_node_group_template.id
+#     version = "$Latest"
+#   }
 
-  depends_on = [
-    aws_iam_role_policy_attachment.AmazonEKSWorkerNodePolicy,
-    aws_iam_role_policy_attachment.AmazonEC2ContainerRegistryReadOnly,
-    # aws_autoscaling_attachment.eks_node_group_attachment,
-  ]
-}
+#   depends_on = [
+#     aws_iam_role_policy_attachment.AmazonEKSWorkerNodePolicy,
+#     aws_iam_role_policy_attachment.AmazonEC2ContainerRegistryReadOnly,
+#     aws_autoscaling_attachment.eks_node_group_attachment,
+#   ]
+# }
 
