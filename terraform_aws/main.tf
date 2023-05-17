@@ -64,7 +64,7 @@ module "eks" {
   enable_irsa = true
   eks_managed_node_groups = {
   main = {
-    desired_capacity = 1
+    desired_capacity = 2
     max_capacity     = 2
     min_capacity     = 0
 
