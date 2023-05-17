@@ -130,7 +130,6 @@ resource "aws_lb_target_group" "eks_target_group" {
     unhealthy_threshold = 3
   }
 }
-
 resource "aws_autoscaling_group" "eks_node_group" {
   name                      = "${local.cluster_name}-nodes"
   min_size                  = 1
@@ -153,6 +152,28 @@ resource "aws_autoscaling_group" "eks_node_group" {
     value               = "1"
     propagate_at_launch = true
   }
+}
+resource "aws_autoscaling_attachment" "eks_node_group_attachment" {
+  autoscaling_group_name = aws_autoscaling_group.eks_node_group.name
+  lb_target_group_arn    = aws_lb_target_group.eks_target_group.arn
+}
+resource "aws_eks_node_group" "private-nodes" {
+  cluster_name    = module.eks.cluster_name
+  node_group_name = "${local.cluster_name}-nodes"
+  node_role_arn   = aws_iam_role.nodes.arn
+
+  subnet_ids =  module.vpc.private_subnets
+
+  scaling_config {
+    desired_size = 1
+    max_size     = 2
+    min_size     = 0
+  }
+
+  launch_template {
+    id      = aws_launch_template.eks_node_group_template.id
+    version = "$Latest"
+  }
 
   depends_on = [
     aws_iam_role_policy_attachment.AmazonEKSWorkerNodePolicy,
@@ -160,32 +181,3 @@ resource "aws_autoscaling_group" "eks_node_group" {
     aws_autoscaling_attachment.eks_node_group_attachment,
   ]
 }
-resource "aws_autoscaling_attachment" "eks_node_group_attachment" {
-  autoscaling_group_name = aws_autoscaling_group.eks_node_group.name
-  lb_target_group_arn    = aws_lb_target_group.eks_target_group.arn
-}
-
-# resource "aws_eks_node_group" "private-nodes" {
-#   cluster_name    = module.eks.cluster_name
-#   node_group_name = "${local.cluster_name}-nodes"
-#   node_role_arn   = aws_iam_role.nodes.arn
-
-#   subnet_ids =  module.vpc.private_subnets
-
-#   scaling_config {
-#     desired_size = 1
-#     max_size     = 2
-#     min_size     = 0
-#   }
-
-#   launch_template {
-#     id      = aws_launch_template.eks_node_group_template.id
-#     version = "$Latest"
-#   }
-
-#   depends_on = [
-#     aws_iam_role_policy_attachment.AmazonEKSWorkerNodePolicy,
-#     aws_iam_role_policy_attachment.AmazonEC2ContainerRegistryReadOnly,
-#     aws_autoscaling_attachment.eks_node_group_attachment,
-#   ]
-# }
