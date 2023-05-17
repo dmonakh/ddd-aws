@@ -81,7 +81,7 @@ jobs:
         run: aws eks update-kubeconfig --region us-east-1 --name mondyk8awsklas
 
       - name: kubectl test
-        run: kubectl get svc 
+        run: kubectl get nodes
 
 
       # - name: Check Services/Pods/Deployment Before Deploy
