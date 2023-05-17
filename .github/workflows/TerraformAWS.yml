@@ -80,8 +80,8 @@ jobs:
       - name: Get Kubeconfig
         run: aws eks update-kubeconfig --region us-east-1 --name mondyk8awsklas
 
-      - name: test 
-        run: kubectl delete pod mysql
+      # - name: test 
+      #   run: kubectl get 
 
       # - name: Check Services/Pods/Deployment Before Deploy
       #   run: echo "This is Services" && kubectl get service && echo "This is PODS" &&kubectl get pods  && echo "This is Deployments" && kubectl get  deployment
@@ -89,8 +89,8 @@ jobs:
       # - name: Apply Kubernetes manifest
       #   run: kubectl apply -f mysql.yml
 
-      - name: Wait for 80 seconds()
-        run: sleep 80s
+      # - name: Wait for 80 seconds()
+      #   run: sleep 80s
 
       # - name: Check Mysql Pods
       #   run: kubectl exec -i $(kubectl get pod -l "app=mysql" -o jsonpath='{.items[0].metadata.name}') -- mysql -u root -p1234 -e "SHOW DATABASES;"
