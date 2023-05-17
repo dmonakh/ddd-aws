@@ -153,8 +153,13 @@ resource "aws_autoscaling_group" "eks_node_group" {
     value               = "1"
     propagate_at_launch = true
   }
-}
 
+  depends_on = [
+    aws_iam_role_policy_attachment.AmazonEKSWorkerNodePolicy,
+    aws_iam_role_policy_attachment.AmazonEC2ContainerRegistryReadOnly,
+    aws_autoscaling_attachment.eks_node_group_attachment,
+  ]
+}
 resource "aws_autoscaling_attachment" "eks_node_group_attachment" {
   autoscaling_group_name = aws_autoscaling_group.eks_node_group.name
   lb_target_group_arn    = aws_lb_target_group.eks_target_group.arn
