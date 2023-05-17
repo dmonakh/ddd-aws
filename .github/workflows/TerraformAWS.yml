@@ -80,8 +80,8 @@ jobs:
       - name: Get Kubeconfig
         run: aws eks update-kubeconfig --region us-east-1 --name mondyk8awsklas
 
-      - name: test 
-        run: kubectl delete pod mysql-77f9746947-p9lbs
+      # - name: test 
+      #   run: kubectl delete pod mysql-77f9746947-p9lbs
 
       # - name: Check Services/Pods/Deployment Before Deploy
       #   run: echo "This is Services" && kubectl get service && echo "This is PODS" &&kubectl get pods  && echo "This is Deployments" && kubectl get  deployment
