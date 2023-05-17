@@ -80,8 +80,8 @@ jobs:
       - name: Get Kubeconfig
         run: aws eks update-kubeconfig --region us-east-1 --name mondyk8awsklas
 
-      - name: get VERSION
-        run: kubectl version  
+      - name: kubectl test
+        run: kubectl get svc 
 
 
       # - name: Check Services/Pods/Deployment Before Deploy
