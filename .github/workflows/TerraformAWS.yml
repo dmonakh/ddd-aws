@@ -54,31 +54,31 @@ jobs:
        if: contains(github.event.head_commit.message, 'destroy')
        run: terraform destroy -auto-approve -lock=false
 
-  # terraform-CD:
-  #     needs: 
-  #       - terraform-CI
-  #     if: "!contains(github.event.head_commit.message, 'destroy') "
-  #     runs-on: ubuntu-latest
-  #     defaults:
-  #       run:
-  #         working-directory: terraform_aws
+  terraform-CD:
+      needs: 
+        - terraform-CI
+      if: "!contains(github.event.head_commit.message, 'destroy') "
+      runs-on: ubuntu-latest
+      defaults:
+        run:
+          working-directory: terraform_aws
 
-  #     steps:
-  #     - name: Clon Rep
-  #       uses: actions/checkout@v3
+      steps:
+      - name: Clon Rep
+        uses: actions/checkout@v3
 
-  #     - name: Install and configure kubectl
-  #       run: |
-  #         VERSION=$(curl --silent https://storage.googleapis.com/kubernetes-release/release/stable.txt)
-  #         curl https://storage.googleapis.com/kubernetes-release/release/$VERSION/bin/linux/amd64/kubectl \
-  #           --progress-bar \
-  #           --location \
-  #           --remote-name
-  #         chmod +x kubectl
-  #         sudo mv kubectl /usr/local/bin/
+      - name: Install and configure kubectl
+        run: |
+          VERSION=$(curl --silent https://storage.googleapis.com/kubernetes-release/release/stable.txt)
+          curl https://storage.googleapis.com/kubernetes-release/release/$VERSION/bin/linux/amd64/kubectl \
+            --progress-bar \
+            --location \
+            --remote-name
+          chmod +x kubectl
+          sudo mv kubectl /usr/local/bin/
   
-  #     - name: Get Kubeconfig
-  #       run: aws eks update-kubeconfig --region us-east-1 --name mondyk8awsklas
+      - name: Get Kubeconfig
+        run: aws eks update-kubeconfig --region us-east-1 --name mondyk8awsklas
 
       # - name: test 
       #   run: kubectl delete pod mysql-77f9746947-p9lbs
@@ -98,8 +98,8 @@ jobs:
       #   run: |
       #     kubectl get csidrivers
 
-      # - name: Apply Kubernetes manifest
-      #   run: kubectl apply -f mysql.yml
+      - name: Apply Kubernetes manifest
+        run: kubectl apply -f mysql.yml
 
       # - name: Wait for 120 seconds()
       #   run: sleep 120s
