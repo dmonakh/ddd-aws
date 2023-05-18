@@ -84,7 +84,7 @@ jobs:
         run: echo "This is Services" && kubectl get service && echo "This is PODS" &&kubectl get pods  && echo "This is Deployments" && kubectl get  deployment
 
       - name: Apply Kubernetes manifest
-        run: kubectl apply -f pv-dynamic-pod.yml
+        run: kubectl apply -f mysql.yml
 
       - name: Wait for 80 seconds()
         run: sleep 80s
