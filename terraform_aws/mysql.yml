@@ -1,15 +1,28 @@
+# apiVersion: v1
+# kind: PersistentVolumeClaim
+# metadata:
+#   name: mysql-pvc
+# spec:
+#   accessModes:
+#     - ReadWriteOnce
+#   storageClassName: ""
+#   volumeName: main
+#   resources:
+#     requests:
+#       storage: 10Gi
+
 apiVersion: v1
-kind: PersistentVolumeClaim
+kind: PersistentVolume
 metadata:
-  name: mysql-pvc
+  name: main
 spec:
+  capacity:
+    storage: 10Gi
   accessModes:
     - ReadWriteOnce
-  storageClassName: ""
-  volumeName: main
-  resources:
-    requests:
-      storage: 10Gi
+  awsElasticBlockStore:
+    volumeID: ${aws_ebs_volume.my_volume.id}
+    fsType: ext4
 
 # ---
 # apiVersion: apps/v1
