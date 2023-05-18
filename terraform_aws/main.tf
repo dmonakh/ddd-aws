@@ -58,11 +58,11 @@ module "eks" {
     instance_type = "t2.micro"
     }
   }
+}
   resource "aws_ebs_volume" "my_volume" {
   availability_zone = var.availability_zone
   size              = 10
   tags = {
     Name = "mypcvolumek8s"
   }
-}
 }
