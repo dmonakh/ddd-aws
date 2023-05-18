@@ -59,10 +59,3 @@ module "eks" {
     }
   }
 }
-  resource "aws_ebs_volume" "my_volume" {
-  availability_zone = data.aws_availability_zones.available.names
-  size              = 10
-  tags = {
-    Name = "mypcvolumek8s"
-  }
-}
