@@ -8,19 +8,6 @@ locals {
   cluster_name = "mondyk8awsklas"
 }
 
-# module "eks-kubeconfig" {
-#   source     = "hyperbadger/eks-kubeconfig/aws"
-#   version    = "1.0.0"
-
-#   depends_on = [module.eks]
-#   cluster_id =  module.eks.cluster_name
-#   }
-
-# resource "local_file" "kubeconfig" {
-#   content  = module.eks-kubeconfig.kubeconfig
-#   filename = "kubeconfig_${local.cluster_name}"
-# }
-
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "3.18.1"
