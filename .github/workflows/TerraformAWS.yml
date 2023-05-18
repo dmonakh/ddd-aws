@@ -101,8 +101,8 @@ jobs:
       - name: Apply Kubernetes manifest
         run: kubectl apply -f mysql.yml
 
-      # - name: Wait for 120 seconds()
-      #   run: sleep 120s
+      # - name: Wait for 80 seconds()
+      #   run: sleep 80s
 
       # - name: Check Mysql Pods
       #   run: kubectl exec -i $(kubectl get pod -l "app=mysql" -o jsonpath='{.items[0].metadata.name}') -- mysql -u root -p1234 -e "SHOW DATABASES;"
