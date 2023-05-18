@@ -37,7 +37,7 @@ module "eks" {
   version = "19.5.1"
 
   cluster_name    = "${local.cluster_name}"
-  cluster_version = "1.24"
+  cluster_version = "1.26"
   subnet_ids      = module.vpc.private_subnets
 
   create_kms_key            = false
@@ -55,7 +55,7 @@ module "eks" {
     max_capacity     = 2
     min_capacity     = 0
 
-    instance_type = "t2.micro"
+    instance_type = "t3.medium"
     }
   }
 }
