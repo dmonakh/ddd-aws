@@ -9,7 +9,7 @@ spec:
   volumeName: main
   resources:
     requests:
-      storage: 20Gi
+      storage: 10Gi
 
 # ---
 # apiVersion: apps/v1
