@@ -1,6 +1,6 @@
 #!/bin/bash
 
-bucket_name="mondytestbucket202"
+bucket_name="mondyk8sbucket2023"
 
 aws s3api head-bucket --bucket "$bucket_name"  2>/dev/null
 
